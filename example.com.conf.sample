@@ -1,52 +1,52 @@
 server {
     listen      80;
-    listen [::]:80; # for IPv6 connections
+    listen [::]:80; # For IPv6 connections
 
     server_name example.com www.example.com;
 
-    # redirect to HTTPS
+    # Redirect to HTTPS
     return 301 https://example.com$request_uri;
 }
 
 server {
     listen      443 ssl http2;
-    listen [::]:443 ssl http2; # for IPv6 connections
+    listen [::]:443 ssl http2; # For IPv6 connections
 
     server_name www.example.com;
 
-    # load SSL certificate files
+    # Locate SSL certificate files
     ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
 
-    # apply strong encryption settings
+    # Common SSL settings
     include servers.d/common_ssl;
 
-    # redirect to the non-www host (declared below)
+    # Redirect to the non-www host (declared below)
     return 301 https://example.com$request_uri;
 }
 
 server {
     listen      443 ssl http2;
-    listen [::]:443 ssl http2; # for IPv6 connections
+    listen [::]:443 ssl http2; # For IPv6 connections
 
     server_name example.com;
 
-    # load SSL certificate files
+    # Locate SSL certificate files
     ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
 
-    # apply strong encryption settings
+    # Common SSL settings
     include servers.d/common_ssl;
 
-    # locate essential paths
+    # Locate essential paths
     root /srv/http/example.com/www;
     access_log /var/log/nginx/server.example.com.access.log;
     error_log  /var/log/nginx/server.example.com.error.log;
 
-    # restrict website access
+    # Restrict website access
     #auth_basic "Authentication Required";
     #auth_basic_user_file /srv/http/example.com/.htpasswd;
 
-    # apply common server settings
+    # Common server settings
     include servers.d/common;
 }
