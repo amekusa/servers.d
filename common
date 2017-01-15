@@ -21,11 +21,12 @@ location / {
 # Deal with PHP files properly
 location ~ \.php$ {
     try_files $uri =404;
-    fastcgi_pass "unix:/var/run/php-fpm/php-fpm.sock";
-    fastcgi_split_path_info ^(.+\.php)(/.+)$;
+
+    # FastCGI settings
     fastcgi_index index.php;
     fastcgi_intercept_errors on;
+    fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-
+    fastcgi_split_path_info ^(.+\.php)(/.+)$;
     include fastcgi_params;
 }
