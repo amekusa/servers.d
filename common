@@ -6,7 +6,7 @@ add_header X-Permitted-Cross-Domain-Policies none;
 add_header X-XSS-Protection "1; mode=block";
 
 # Directory index files
-index index.htm index.html index.php;
+index index.html index.php;
 
 # Disallow access to some locations
 location ~ /\.(ht|git) {
