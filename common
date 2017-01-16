@@ -13,11 +13,6 @@ location ~ /\.(ht|git) {
     deny all;
 }
 
-# Check file exist and send request string to index.php
-location / {
-    try_files $uri $uri/ /index.php?$args;
-}
-
 # Deal with PHP files properly
 location ~ \.php$ {
     # Zero-day exploit defense
