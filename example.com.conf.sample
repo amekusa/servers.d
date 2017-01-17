@@ -38,12 +38,14 @@ server {
     # Common SSL settings
     include servers.d/common_ssl;
 
-    # Locate essential paths
+    # The document root
     root /srv/http/example.com/www;
+
+    # Logs
     access_log /var/log/nginx/server.example.com.access.log;
     error_log  /var/log/nginx/server.example.com.error.log;
 
-    # Restrict website access
+    # Restrict strangers
     #auth_basic "Authentication Required";
     #auth_basic_user_file /srv/http/example.com/.htpasswd;
 
