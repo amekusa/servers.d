@@ -14,7 +14,9 @@ server {
 
     server_name www.example.com;
 
-    # Locate SSL certificate files
+    # SSL certificate files
+    # To generate them, execute following command:
+    # $ certbot certonly --webroot -w /srv/http/example.com/www -d example.com,www.example.com
     ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
 
@@ -31,7 +33,7 @@ server {
 
     server_name example.com;
 
-    # Locate SSL certificate files
+    # SSL certificate files
     ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
 
