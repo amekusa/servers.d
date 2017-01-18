@@ -1,5 +1,6 @@
 /*
 !/.gitignore
+!/README.md
 !/common
 !/common_ssl
 !/default.conf
