@@ -31,5 +31,6 @@ location ~ [^/]\.php(/|$) {
 
     # FastCGI parameters
     include fastcgi_params;
+    fastcgi_param HTTP_PROXY ""; # Mitigate https://httpoxy.org/ vulnerabilities
     fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
 }
