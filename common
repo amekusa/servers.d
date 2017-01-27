@@ -13,17 +13,21 @@ location ~ /\.(ht|git) {
     deny all;
 }
 
-# Deal with PHP files properly
-location ~ \.php$ {
-    # Zero-day exploit defense
-    # http://forum.nginx.org/read.php?2,88845,page=3
-    try_files $uri =404;
+# Handling PHP requests
+location ~ [^/]\.php(/|$) {
+
+    # Parse URL properly
+    fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+
+    # Make sure the requested PHP file exists
+    if (!-f $document_root$fastcgi_script_name) {
+        return 404;
+    }
 
     # FastCGI settings
     fastcgi_index index.php;
     fastcgi_intercept_errors on;
     fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
-    fastcgi_split_path_info ^(.+\.php)(/.+)$;
 
     # FastCGI parameters
     include fastcgi_params;
