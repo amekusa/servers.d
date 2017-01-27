@@ -1,0 +1,59 @@
+server {
+    listen      80;
+    listen [::]:80; # For IPv6 connections
+
+    server_name cloud.example.com;
+
+    # Redirect to HTTPS
+    return 301 https://cloud.example.com$request_uri;
+}
+
+server {
+    listen      443 ssl http2;
+    listen [::]:443 ssl http2; # For IPv6 connections
+
+    server_name cloud.example.com;
+
+    # SSL certificate files
+    ssl_certificate     /etc/letsencrypt/live/cloud.example.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/cloud.example.com/privkey.pem;
+
+    # Common SSL settings
+    include servers.d/common_ssl;
+
+    # The document root
+    root /usr/share/webapps/owncloud;
+
+    # Error pages
+    error_page 403 /core/templates/403.php;
+    error_page 404 /core/templates/404.php;
+
+    # Common server settings
+    include servers.d/common;
+
+    # Deny robot's indexing
+    add_header X-Robots-Tag none;
+
+    # Upload size limit
+    client_max_body_size 10G;
+    fastcgi_buffers 64 4K;
+
+    # Forbidden directories
+    location ~ ^/(build|tests|config|lib|3rdparty|templates|data)/ {
+        deny all;
+    }
+
+    # Forbidden path patterns
+    location ~ ^/(\.|autotest|occ|issue|indie|db_|console) {
+        deny all;
+    }
+
+    # Very basic serving rules
+    location / {
+        rewrite ^/.well-known/carddav /remote.php/carddav/ permanent;
+        rewrite ^/.well-known/caldav /remote.php/caldav/ permanent;
+        rewrite ^/remote/(.*) /remote.php last;
+        rewrite ^(/core/doc/[^\/]+/)$ $1/index.html;
+        try_files $uri $uri/ =404;
+    }
+}
