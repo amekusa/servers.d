@@ -18,25 +18,28 @@ server {
     ssl_certificate     /etc/letsencrypt/live/cloud.example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/cloud.example.com/privkey.pem;
 
-    # Common SSL settings
-    include servers.d/common_ssl;
+    # SSL settings
+    include servers.d/common/ssl;
 
     # The document root
     root /usr/share/webapps/owncloud;
+
+    # Directory index
+    index index.php;
 
     # Error pages
     error_page 403 /core/templates/403.php;
     error_page 404 /core/templates/404.php;
 
-    # Common server settings
-    include servers.d/common;
-
-    # Deny robot's indexing
-    add_header X-Robots-Tag none;
+    # Response headers
+    include servers.d/common/headers;
+    add_header X-Robots-Tag none; # Deny robot's indexing
 
     # Upload size limit
     client_max_body_size 10G;
-    fastcgi_buffers 64 4K;
+
+    # Common serving rulues
+    include servers.d/common/locations;
 
     # Forbidden directories
     location ~ ^/(build|tests|config|lib|3rdparty|templates|data)/ {
@@ -55,5 +58,11 @@ server {
         rewrite ^/remote/(.*) /remote.php last;
         rewrite ^(/core/doc/[^\/]+/)$ $1/index.html;
         try_files $uri $uri/ =404;
+    }
+
+    # Handling PHP requests
+    location ~ [^/]\.php(/|$) {
+        include servers.d/common/php;
+        fastcgi_buffers 64 4K;
     }
 }

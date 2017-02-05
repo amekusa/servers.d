@@ -1,0 +1,17 @@
+# Parse URL properly
+fastcgi_split_path_info ^(.+?\.php)(/.*)$;
+
+# Make sure the requested PHP file exists
+if (!-f $document_root$fastcgi_script_name) {
+    return 404;
+}
+
+# FastCGI settings
+fastcgi_index index.php;
+fastcgi_intercept_errors on;
+fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
+
+# FastCGI parameters
+include fastcgi_params;
+fastcgi_param HTTP_PROXY ""; # Mitigate https://httpoxy.org/ vulnerabilities
+fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;

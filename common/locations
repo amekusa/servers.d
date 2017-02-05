@@ -1,0 +1,4 @@
+# Forbidden paths
+location ~ /\.(ht|git) {
+    deny all;
+}
