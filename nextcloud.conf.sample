@@ -22,10 +22,7 @@ server {
     include servers.d/common/ssl;
 
     # The document root
-    root /usr/share/webapps/owncloud;
-
-    # Directory index
-    index index.php;
+    root /usr/share/webapps/nextcloud;
 
     # Error pages
     error_page 403 /core/templates/403.php;
@@ -36,10 +33,15 @@ server {
     add_header X-Robots-Tag none; # Deny robot's indexing
 
     # Upload size limit
-    client_max_body_size 10G;
+    client_max_body_size 512M;
 
     # Common serving rulues
     include servers.d/common/locations;
+
+    # CardDAV & CalDAV
+    location ~ ^/\.well-known/ca(l|rd)dav$ {
+        return 301 $scheme://cloud.example.com/remote.php/dav;
+    }
 
     # Forbidden directories
     location ~ ^/(build|tests|config|lib|3rdparty|templates|data)/ {
@@ -53,17 +55,29 @@ server {
 
     # Very basic serving rules
     location / {
-        rewrite ^/.well-known/carddav /remote.php/carddav/ permanent;
-        rewrite ^/.well-known/caldav /remote.php/caldav/ permanent;
-        rewrite ^/remote/(.*) /remote.php last;
-        rewrite ^(/core/doc/[^\/]+/)$ $1/index.html;
-        try_files $uri $uri/ =404;
+        rewrite ^ /index.php$uri;
     }
 
     # Handling PHP requests
-    location ~ [^/]\.php(/|$) {
+    location ~ ^/(index|remote|public|cron|core/ajax/update|status|ocs/v[12]|(updater|ocs-provider)/.+|core/templates/40[34])\.php($|/) {
         include servers.d/common/php;
         fastcgi_buffers 64 4K;
+        fastcgi_param PATH /usr/local/sbin:/usr/local/bin:/usr/bin;
+        fastcgi_param front_controller_active true;
         fastcgi_param modHeadersAvailable true; #Avoid sending the security headers twice
+        fastcgi_request_buffering off;
+    }
+
+    # Updater / OCS provider
+    location ~ ^/(updater|ocs-provider)($|/) {
+       try_files $uri/ =404;
+       index index.php;
+    }
+
+    # Assets
+    location ~* \.(css|js|svg|gif|png|html|ttf|woff|ico|jpe?g)$ {
+        try_files $uri /index.php$uri$is_args$args;
+        add_header Cache-Control "public, max-age=7200";
+        access_log off;
     }
 }
