@@ -2,3 +2,10 @@
 location ~ /\.(ht|git) {
     deny all;
 }
+
+# For crawlers
+location = /robots.txt {
+    allow all;
+    access_log off;
+    log_not_found off;
+}
