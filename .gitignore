@@ -1,7 +1,7 @@
 /*
 !/.gitignore
 !/README.md
-!/common
-!/common_ssl
+!/common/
 !/default.conf
 !/example.com.conf.sample
+!/nextcloud.conf.sample

@@ -20,8 +20,8 @@ server {
     ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
 
-    # Common SSL settings
-    include servers.d/common_ssl;
+    # SSL settings
+    include servers.d/common/ssl;
 
     # Redirect to the non-www host (declared below)
     return 301 https://example.com$request_uri;
@@ -37,8 +37,8 @@ server {
     ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
 
-    # Common SSL settings
-    include servers.d/common_ssl;
+    # SSL settings
+    include servers.d/common/ssl;
 
     # The document root
     root /srv/http/example.com/www;
@@ -47,16 +47,26 @@ server {
     access_log /var/log/nginx/server.example.com.access.log;
     error_log  /var/log/nginx/server.example.com.error.log;
 
-    # Restrict strangers
-    #auth_basic "Authentication Required";
-    #auth_basic_user_file /srv/http/example.com/.htpasswd;
+    # Directory index
+    index index.html index.php;
 
-    # Common server settings
-    include servers.d/common;
+    # Response headers
+    include servers.d/common/headers;
+
+    # Common serving rulues
+    include servers.d/common/locations;
 
     # Very basic serving rules
     location / {
         try_files $uri $uri/ =404;             # For static site
         #try_files $uri $uri/ /index.php?$args; # For WordPress
     }
+
+    # Handling PHP requests
+    location ~ [^/]\.php(/|$) {
+        include servers.d/common/php;
+    }
+
+    # Common WordPress settings
+    #include servers.d/common/wordpress;
 }
