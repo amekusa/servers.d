@@ -1,0 +1,10 @@
+# Deny access to any files with a .php extension in the uploads directory
+location ~ /(uploads|files)/.*\.php(/|$) {
+    deny all;
+}
+
+# PHP 7.1 segmentation faults with Opcache
+location = /xmlrpc.php {
+    include servers.d/common/php;
+    fastcgi_param PHP_ADMIN_VALUE "opcache.enable=0";
+}

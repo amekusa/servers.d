@@ -66,4 +66,7 @@ server {
     location ~ [^/]\.php(/|$) {
         include servers.d/common/php;
     }
+
+    # Common WordPress settings
+    #include servers.d/common/wordpress;
 }
