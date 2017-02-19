@@ -1,5 +1,5 @@
 # Force HTTPS
-add_header Strict-Transport-Security "max-age=31536000; includeSubdomains";
+add_header Strict-Transport-Security "max-age=31536000";
 
 # Force TLS protocols
 ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
