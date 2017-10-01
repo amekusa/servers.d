@@ -4,8 +4,17 @@ server {
 
     server_name example.com www.example.com;
 
+    # ACME challenge:
+    # $ certbot certonly --webroot -w /var/lib/letsencrypt -d example.com,www.example.com
+    location ^~ /.well-known/acme-challenge/ {
+        default_type "text/plain";
+        root /var/lib/letsencrypt;
+    }
+
     # Redirect to HTTPS
-    return 301 https://example.com$request_uri;
+    location / {
+        return 301 https://example.com$request_uri;
+    }
 }
 
 server {
@@ -15,8 +24,6 @@ server {
     server_name www.example.com;
 
     # SSL certificate files
-    # To generate them, execute following command:
-    # $ certbot certonly --webroot -w /srv/http/example.com/www -d example.com,www.example.com
     ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
 
