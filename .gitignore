@@ -4,4 +4,5 @@
 !/common/
 !/default.conf
 !/example.com.conf.sample
+!/ssl.example.com.conf.sample
 !/nextcloud.conf.sample
