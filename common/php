@@ -14,5 +14,6 @@ fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
 # FastCGI parameters
 include fastcgi_params;
 fastcgi_param HTTP_PROXY ""; # Mitigate https://httpoxy.org/ vulnerabilities
+fastcgi_param HTTP_HOST $host; # Some apps use this variable
 fastcgi_param PATH_INFO $fastcgi_path_info;
 fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
