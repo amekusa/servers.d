@@ -3,8 +3,7 @@ location ~ /(uploads|files)/.*\.php(/|$) {
     deny all;
 }
 
-# PHP 7.1 segmentation faults with Opcache
-location = /xmlrpc.php {
-    include servers.d/common/php;
-    fastcgi_param PHP_ADMIN_VALUE "opcache.enable=0";
+# Deny XML-RPC requests
+location ~ /xmlrpc\.php(/|$) {
+    deny all;
 }
