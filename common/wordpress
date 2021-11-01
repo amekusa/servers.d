@@ -1,3 +1,9 @@
+# Max request body size
+client_max_body_size 8M;
+# NOTE: Also check the php.ini for the following settings:
+#       post_max_size (default: 8M)
+#       upload_max_filesize (default: 2M)
+
 # Deny access to any files with a .php extension in the uploads directory
 location ~ /(uploads|files)/.*\.php(/|$) {
     deny all;
