@@ -1,5 +1,7 @@
-# Force HTTPS
-add_header Strict-Transport-Security "max-age=31536000";
+# Force browsers to use HTTPS for a certain period
+#add_header Strict-Transport-Security "max-age=31536000"; # 1 year
+add_header Strict-Transport-Security "max-age=15552000"; # 180 days
+#add_header Strict-Transport-Security "max-age=7776000";  # 90 days
 
 # Force TLS protocols
 ssl_protocols TLSv1.2 TLSv1.3;
