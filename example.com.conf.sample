@@ -29,6 +29,7 @@ server {
 
     # SSL settings
     include servers.d/common/ssl;
+    include servers.d/common/ocsp;
 
     # Redirect to the non-www host (declared below)
     return 301 https://example.com$request_uri;
@@ -46,8 +47,9 @@ server {
 
     # SSL settings
     include servers.d/common/ssl;
+    include servers.d/common/ocsp;
 
-    # The document root
+    # Document root
     root /srv/http/example.com/www;
 
     # Logs
@@ -60,8 +62,11 @@ server {
     # Response headers
     include servers.d/common/headers;
 
-    # Common serving rulues
+    # Rules for common locations
     include servers.d/common/locations;
+
+    # Common WordPress settings
+    #include servers.d/common/wordpress;
 
     # Very basic serving rules
     location / {
@@ -73,7 +78,4 @@ server {
     location ~ [^/]\.php(/|$) {
         include servers.d/common/php;
     }
-
-    # Common WordPress settings
-    #include servers.d/common/wordpress;
 }
