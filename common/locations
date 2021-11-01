@@ -1,5 +1,10 @@
-# Forbidden paths
+# Deny .htaccess, .htpasswd, .git, .gitignore, etc.
 location ~ /\.(ht|git) {
+    deny all;
+}
+
+# Deny Composer libraries
+location ~ /vendor(/|$) {
     deny all;
 }
 
@@ -8,4 +13,9 @@ location = /robots.txt {
     allow all;
     access_log off;
     log_not_found off;
+}
+
+location = /favicon.ico {
+    log_not_found off;
+    access_log off;
 }
