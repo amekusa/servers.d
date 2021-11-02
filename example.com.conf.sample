@@ -6,7 +6,7 @@ server {
 
     # ACME challenge:
     # $ certbot certonly --webroot -w /var/lib/letsencrypt -d example.com,www.example.com
-    include servers.d/common/letsencrypt;
+    include servers.d/common/acme;
 
     # Redirect to HTTPS
     location / {

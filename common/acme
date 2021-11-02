@@ -1,3 +1,4 @@
+# Handle automated certification protocol
 location ^~ /.well-known/acme-challenge/ {
     allow all;
     root /var/lib/letsencrypt;
