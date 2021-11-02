@@ -10,6 +10,7 @@ if (!-f $document_root$fastcgi_script_name) {
 fastcgi_index index.php;
 fastcgi_intercept_errors on;
 fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
+fastcgi_hide_header X-Powered-By; # Hide PHP version
 
 # FastCGI parameters
 include fastcgi_params;
