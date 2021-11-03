@@ -6,7 +6,14 @@ server {
 
     # ACME challenge:
     # $ certbot certonly --webroot -w /var/lib/letsencrypt -d example.com,www.example.com
-    include servers.d/common/acme;
+    include servers.d/common/letsencrypt;
+    # NOTE: If the challenge failed,
+    #       check if the webroot has the correct permissions and
+    #       '.well-known' directory. If you're not sure of it, do:
+    #       $ cd /var/lib/letsencrypt
+    #       $ sudo chgrp http .       # set group to 'http'
+    #       $ sudo chmod g+s .        # and all the subsequent file/dir inherits it
+    #       $ sudo mkdir .well-known  # create '.well-known' dir
 
     # Redirect to HTTPS
     location / {
