@@ -4,7 +4,7 @@ location ~ /\.(ht|git) {
 }
 
 # Deny Composer libraries
-location ~ /vendor(/|$) {
+location ~ /vendor/.*?[^/]\.php(?:/|$) {
     deny all;
 }
 
