@@ -1,10 +1,11 @@
 # Parse URL properly
 fastcgi_split_path_info ^(.+?\.php)(/.*)$;
 
-# Make sure the requested PHP file exists
-if (!-f $document_root$fastcgi_script_name) {
-    return 404;
-}
+set $path_info $fastcgi_path_info; # Save path_info
+# NOTE: This is necessary because 'try_files' resets $fastcgi_path_info
+
+# Serve the requested file, or return 404 if it doesn't exist
+try_files $fastcgi_script_name =404;
 
 # FastCGI settings
 fastcgi_index index.php;
@@ -16,5 +17,5 @@ fastcgi_hide_header X-Powered-By; # Hide PHP version
 include fastcgi_params;
 fastcgi_param HTTP_PROXY ""; # Mitigate https://httpoxy.org/ vulnerabilities
 fastcgi_param HTTP_HOST $host; # Some apps use this variable
-fastcgi_param PATH_INFO $fastcgi_path_info;
+fastcgi_param PATH_INFO $path_info;
 fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
