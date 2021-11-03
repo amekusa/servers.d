@@ -4,6 +4,9 @@ server {
 
     server_name cloud.example.com;
 
+    # ACME challenge
+    include servers.d/common/letsencrypt;
+
     # Redirect to HTTPS
     return 301 https://cloud.example.com$request_uri;
 }
@@ -20,64 +23,70 @@ server {
 
     # SSL settings
     include servers.d/common/ssl;
+    include servers.d/common/ocsp;
 
-    # The document root
+    # Document root
     root /usr/share/webapps/nextcloud;
 
+    # Directory index
+    index index.php index.html /index.php$request_uri;
+
     # Error pages
-    error_page 403 /core/templates/403.php;
-    error_page 404 /core/templates/404.php;
+    #error_page 403 /core/templates/403.php;
+    #error_page 404 /core/templates/404.php;
 
     # Response headers
     include servers.d/common/headers;
-    add_header X-Robots-Tag none; # Deny robot's indexing
+    add_header Content-Security-Policy "default-src 'self'" always; # No cross-site contents allowed
+    add_header Referrer-Policy "no-referrer" always;
+    add_header X-Robots-Tag "none" always; # Deny robot's indexing
 
     # Upload size limit
     client_max_body_size 512M;
+    client_body_timeout 300s;
 
-    # Common serving rulues
+    # Hide certain paths
+    location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/) { return 404; }
+    location ~ ^/(?:\.|autotest|occ|issue|indie|db_|console)               { return 404; }
+
+    # Rules for common locations
     include servers.d/common/locations;
 
-    # CardDAV & CalDAV
-    location ~ ^/\.well-known/ca(l|rd)dav$ {
-        return 301 $scheme://cloud.example.com/remote.php/dav;
-    }
+    # Ensure this block, which passes PHP files to the PHP process, is above the blocks
+    # which handle static assets (as seen below). If this block is not declared first,
+    # then Nginx will encounter an infinite rewriting loop when it prepends `/index.php`
+    # to the URI, resulting in a HTTP 500 error response.
+    location ~ [^/]\.php(?:$|/) {
+        # Required for legacy support
+        rewrite ^/(?!index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[ms]-provider\/.+|.+\/richdocumentscode\/proxy) /index.php$request_uri;
 
-    # Forbidden directories
-    location ~ ^/(build|tests|config|lib|3rdparty|templates|data)/ {
-        deny all;
-    }
-
-    # Forbidden path patterns
-    location ~ ^/(\.|autotest|occ|issue|indie|db_|console) {
-        deny all;
-    }
-
-    # Very basic serving rules
-    location / {
-        rewrite ^ /index.php$uri;
-    }
-
-    # Handling PHP requests
-    location ~ ^/(index|remote|public|cron|core/ajax/update|status|ocs/v[12]|(updater|ocs-provider)/.+|core/templates/40[34])\.php($|/) {
+        # PHP settings
         include servers.d/common/php;
-        fastcgi_buffers 64 4K;
-        fastcgi_param PATH /usr/local/sbin:/usr/local/bin:/usr/bin;
-        fastcgi_param front_controller_active true;
-        fastcgi_param modHeadersAvailable true; #Avoid sending the security headers twice
+        fastcgi_param modHeadersAvailable true;         # Avoid sending the security headers twice
+        fastcgi_param front_controller_active true;     # Enable pretty urls
         fastcgi_request_buffering off;
-    }
-
-    # Updater / OCS provider
-    location ~ ^/(updater|ocs-provider)($|/) {
-       try_files $uri/ =404;
-       index index.php;
+        fastcgi_buffers 64 4K;
     }
 
     # Assets
-    location ~* \.(css|js|svg|gif|png|html|ttf|woff|ico|jpe?g)$ {
-        try_files $uri /index.php$uri$is_args$args;
-        add_header Cache-Control "public, max-age=7200";
-        access_log off;
+    location ~ [^/]\.(?:css|js|svg|gif|png|jpe?g|ico)$ {
+        try_files $uri /index.php$request_uri;
+        expires 6M;         # Cache-Control policy borrowed from `.htaccess`
+        access_log off;     # Optional: Don't log access to assets
+    }
+
+    # Fonts
+    location ~ [^/]\.(?:woff2?|ttf|otf)$ {
+        try_files $uri /index.php$request_uri;
+        expires 7d;         # Cache-Control policy borrowed from `.htaccess`
+        access_log off;     # Optional: Don't log access to assets
+    }
+
+    location /remote {
+        return 301 /remote.php$request_uri;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.php$request_uri;
     }
 }
