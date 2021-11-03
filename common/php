@@ -15,6 +15,7 @@ fastcgi_hide_header X-Powered-By; # Hide PHP version
 
 # FastCGI parameters
 include fastcgi_params;
+fastcgi_param HTTPS $https;
 fastcgi_param HTTP_PROXY ""; # Mitigate https://httpoxy.org/ vulnerabilities
 fastcgi_param HTTP_HOST $host; # Some apps use this variable
 fastcgi_param PATH_INFO $path_info;
