@@ -3,11 +3,6 @@ location ~ /\.(ht|git) {
     deny all;
 }
 
-# Deny Composer libraries
-location ~ /vendor/.*?[^/]\.php(?:/|$) {
-    deny all;
-}
-
 # For crawlers
 location = /robots.txt {
     allow all;
