@@ -15,7 +15,6 @@ try_files $fastcgi_script_name =404;
 # FastCGI settings
 fastcgi_index index.php;
 fastcgi_intercept_errors on;
-fastcgi_pass unix:/var/run/php-fpm/php-fpm.sock;
 fastcgi_hide_header X-Powered-By; # Hide PHP version
 
 # FastCGI parameters

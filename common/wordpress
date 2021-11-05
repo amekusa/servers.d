@@ -4,12 +4,19 @@ client_max_body_size 8M;
 #       post_max_size (default: 8M)
 #       upload_max_filesize (default: 2M)
 
-# Deny access to any files with a .php extension in the uploads directory
-location ~ /(uploads|files)/.*\.php(/|$) {
-    deny all;
-}
+# Handling PHP requests
+location ~ [^/]\.php(?:/|$) {
 
-# Deny XML-RPC requests
-location ~ /xmlrpc\.php(/|$) {
-    deny all;
+    # Deny requests to any PHP file in the uploads directory
+    location ~ /(?:uploads|files)/ {
+        deny all;
+    }
+
+    # Deny XML-RPC requests
+    location ~ /xmlrpc\.php(?:/|$) {
+        deny all;
+    }
+
+    fastcgi_pass unix:/run/php-fpm/php-fpm.sock;
+    include servers.d/common/php;
 }

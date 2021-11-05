@@ -77,9 +77,4 @@ server {
         try_files $uri $uri/ =404;             # For static site
         #try_files $uri $uri/ /index.php?$args; # For WordPress
     }
-
-    # Handling PHP requests
-    location ~ [^/]\.php(/|$) {
-        include servers.d/common/php;
-    }
 }
