@@ -31,13 +31,8 @@ server {
     # Directory index
     index index.php index.html /index.php$request_uri;
 
-    # Error pages
-    #error_page 403 /core/templates/403.php;
-    #error_page 404 /core/templates/404.php;
-
     # Response headers
     include servers.d/common/headers;
-    add_header Content-Security-Policy "default-src 'self'" always; # No cross-site contents allowed
     add_header Referrer-Policy "no-referrer" always;
     add_header X-Robots-Tag "none" always; # Deny robot's indexing
 
