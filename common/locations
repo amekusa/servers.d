@@ -1,6 +1,8 @@
-# Deny .htaccess, .htpasswd, .git, .gitignore, etc.
-location ~ /\.(ht|git) {
+# Deny dotfiles/dirs except for .well-known
+location ~ /\.(?!well-known/) {
     deny all;
+    access_log off;
+    log_not_found off;
 }
 
 # For crawlers
@@ -11,6 +13,6 @@ location = /robots.txt {
 }
 
 location = /favicon.ico {
-    log_not_found off;
     access_log off;
+    log_not_found off;
 }
