@@ -16,6 +16,7 @@ try_files $fastcgi_script_name =404;
 fastcgi_index index.php;
 fastcgi_intercept_errors on;
 fastcgi_hide_header X-Powered-By; # Hide PHP version
+fastcgi_max_temp_file_size 0; # Prevent fastcgi_buffering from allocating any disk space to buffers when RAM is insufficient
 
 # FastCGI parameters
 include fastcgi_params;
