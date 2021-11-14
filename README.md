@@ -1,8 +1,8 @@
 # servers.d
-Nginx server setup configurations
+Nginx server configurations
 
 ## How to install
-1. Clone the repository from `/etc/nginx`
+1. Clone the repository in `/etc/nginx`
 2. Add following line inside of `http` block of `nginx.conf`
 ```nginx
 include servers.d/*.conf;
