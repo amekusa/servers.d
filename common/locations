@@ -1,5 +1,10 @@
-# Deny dotfiles/dirs except for .well-known
+# Block dotfiles/dirs except for .well-known
 location ~ /\.(?!well-known/) {
+    include servers.d/common/block;
+}
+
+# Block direct access to Composer libraries
+location ~ /vendor/.+\.php(?:/|$) {
     include servers.d/common/block;
 }
 

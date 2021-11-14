@@ -1,8 +1,3 @@
-# Deny direct requets to Composer libraries
-location ~ /vendor/ {
-    include servers.d/common/block;
-}
-
 # Parse URL properly
 fastcgi_split_path_info ^(.+?\.php)(/.*)$;
 
