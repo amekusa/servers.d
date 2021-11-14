@@ -28,6 +28,10 @@ server {
     # Document root
     root /usr/share/webapps/nextcloud;
 
+    # Logs
+    access_log /var/log/nginx/server.cloud.example.com.access.log;
+    error_log  /var/log/nginx/server.cloud.example.com.error.log;
+
     # Directory index
     index index.php index.html /index.php$request_uri;
 
