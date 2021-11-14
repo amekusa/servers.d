@@ -9,12 +9,12 @@ location ~ [^/]\.php(?:/|$) {
 
     # Deny requests to any PHP file in the uploads directory
     location ~ /(?:uploads|files)/ {
-        deny all;
+        include servers.d/common/block;
     }
 
     # Deny XML-RPC requests
     location ~ /xmlrpc\.php(?:/|$) {
-        deny all;
+        include servers.d/common/block;
     }
 
     fastcgi_pass unix:/run/php-fpm/php-fpm.sock;

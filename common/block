@@ -1,0 +1,4 @@
+#deny all;
+return 444;
+access_log off;
+error_log  /var/log/nginx/blocked.error.log;

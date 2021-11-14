@@ -1,6 +1,6 @@
 # Deny direct requets to Composer libraries
 location ~ /vendor/ {
-    deny all;
+    include servers.d/common/block;
 }
 
 # Parse URL properly

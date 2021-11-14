@@ -1,8 +1,6 @@
 # Deny dotfiles/dirs except for .well-known
 location ~ /\.(?!well-known/) {
-    deny all;
-    access_log off;
-    log_not_found off;
+    include servers.d/common/block;
 }
 
 # For crawlers
