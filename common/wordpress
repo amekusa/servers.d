@@ -7,13 +7,15 @@ client_max_body_size 8M;
 # Handling PHP requests
 location ~ [^/]\.php(?:/|$) {
 
-    # Deny requests to any PHP file in the uploads directory
-    location ~ /(?:uploads|files)/ {
+    # Block: /wp-includes/**/*.php
+    #        /wp-content/**/*.php
+    location ~ ^/wp-(?:includes|content)/ {
         include servers.d/common/block;
     }
 
-    # Deny XML-RPC requests
-    location ~ /xmlrpc\.php(?:/|$) {
+    # Block: /xmlrpc.php
+    #        /wp-config.php
+    location ~ ^/(?:xmlrpc|wp-config)\.php(?:/|$) {
         include servers.d/common/block;
     }
 
