@@ -41,8 +41,9 @@ server {
     client_body_timeout 300s;
 
     # Hide certain paths
-    location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/) { return 404; }
-    location ~ ^/(?:\.|autotest|occ|issue|indie|db_|console)               { return 404; }
+    location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/) {
+        include servers.d/common/block;
+    }
 
     # Rules for common locations
     include servers.d/common/locations;
