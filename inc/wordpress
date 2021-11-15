@@ -4,18 +4,6 @@ client_max_body_size 8M;
 #       post_max_size (default: 8M)
 #       upload_max_filesize (default: 2M)
 
-# Block: xmlrpc.php
-#        wp-config.php
-location ~ /(?:xmlrpc|wp-config)\.php(?:/|$) {
-    include servers.d/inc/block;
-}
-
-# Block: wp-includes/**/*.php
-#        wp-content/**/*.php
-location ~ /wp-(?:includes|content)/.+\.php(?:/|$) {
-    include servers.d/inc/block;
-}
-
 # Do not log wp-cron.php
 location ~ ^/wp-cron\.php$ {
     access_log off;

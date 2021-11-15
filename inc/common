@@ -1,4 +1,4 @@
-# Block bad user agents
-if ($bad_ua) {
-    return 444;
-}
+# Block scams
+if ($bad_ua) { return 444; }
+if ($bad_uri) { return 444; }
+if ($bad_args) { return 444; }

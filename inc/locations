@@ -10,13 +10,3 @@ location = /robots.txt {
     access_log off;
     log_not_found off;
 }
-
-# Block dotfiles/dirs except for .well-known
-location ~ /\.(?!well-known/) {
-    include servers.d/inc/block;
-}
-
-# Block direct access to Composer libraries
-location ~ /vendor/.+\.php(?:/|$) {
-    include servers.d/inc/block;
-}
