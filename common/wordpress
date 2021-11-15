@@ -16,6 +16,7 @@ location ~ /wp-(?:includes|content)/.+\.php(?:/|$) {
     include servers.d/common/block;
 }
 
+# Do not log wp-cron.php
 location ~ ^/wp-cron\.php$ {
     access_log off;
     fastcgi_pass unix:/run/php-fpm/php-fpm.sock;
