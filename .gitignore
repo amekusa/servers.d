@@ -2,6 +2,7 @@
 !/.gitignore
 !/README.md
 !/inc/
+!/common.conf
 !/dynamic.conf.sample
 !/example.com.conf.sample
 !/nextcloud.conf.sample
