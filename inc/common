@@ -1,0 +1,4 @@
+# Block bad user agents
+if ($bad_ua) {
+    include servers.d/inc/block;
+}

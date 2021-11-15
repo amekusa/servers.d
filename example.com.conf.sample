@@ -4,6 +4,9 @@ server {
 
     server_name example.com www.example.com;
 
+    # Common settings
+    include servers.d/inc/common;
+
     # ACME challenge:
     # $ certbot certonly --webroot -w /var/lib/letsencrypt -d example.com,www.example.com
     include servers.d/inc/letsencrypt;
@@ -27,6 +30,9 @@ server {
 
     server_name www.example.com;
 
+    # Common settings
+    include servers.d/inc/common;
+
     # SSL certificate files
     ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
@@ -44,6 +50,9 @@ server {
     listen [::]:443 ssl http2; # For IPv6 connections
 
     server_name example.com;
+
+    # Common settings
+    include servers.d/inc/common;
 
     # SSL certificate files
     ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;

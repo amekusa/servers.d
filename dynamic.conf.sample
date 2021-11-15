@@ -5,6 +5,9 @@ server {
     # Listen on the www host
     server_name ~^(www\.)(?<domain>.+)$;
 
+    # Common settings
+    include servers.d/inc/common;
+
     # Redirect to the non-www host (declared below)
     return 301 $scheme://$domain$request_uri;
 }
@@ -15,6 +18,9 @@ server {
 
     # Catch all non-www domains
     server_name ~(?<domain>.+)$;
+
+    # Common settings
+    include servers.d/inc/common;
 
     # Document root
     root /srv/http/$domain/www;
