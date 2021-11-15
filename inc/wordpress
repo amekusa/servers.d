@@ -7,24 +7,24 @@ client_max_body_size 8M;
 # Block: xmlrpc.php
 #        wp-config.php
 location ~ /(?:xmlrpc|wp-config)\.php(?:/|$) {
-    include servers.d/common/block;
+    include servers.d/inc/block;
 }
 
 # Block: wp-includes/**/*.php
 #        wp-content/**/*.php
 location ~ /wp-(?:includes|content)/.+\.php(?:/|$) {
-    include servers.d/common/block;
+    include servers.d/inc/block;
 }
 
 # Do not log wp-cron.php
 location ~ ^/wp-cron\.php$ {
     access_log off;
     fastcgi_pass unix:/run/php-fpm/php-fpm.sock;
-    include servers.d/common/php;
+    include servers.d/inc/php;
 }
 
 # Handling PHP requests
 location ~ [^/]\.php(?:/|$) {
     fastcgi_pass unix:/run/php-fpm/php-fpm.sock;
-    include servers.d/common/php;
+    include servers.d/inc/php;
 }

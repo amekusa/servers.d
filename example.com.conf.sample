@@ -6,7 +6,7 @@ server {
 
     # ACME challenge:
     # $ certbot certonly --webroot -w /var/lib/letsencrypt -d example.com,www.example.com
-    include servers.d/common/letsencrypt;
+    include servers.d/inc/letsencrypt;
     # NOTE: If the challenge failed,
     #       check if the webroot has the correct permissions and
     #       '.well-known' directory. If you're not sure of it, do:
@@ -32,8 +32,8 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
 
     # SSL settings
-    include servers.d/common/ssl;
-    include servers.d/common/ocsp;
+    include servers.d/inc/ssl;
+    include servers.d/inc/ocsp;
 
     # Redirect to the non-www host (declared below)
     return 301 https://example.com$request_uri;
@@ -50,8 +50,8 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
 
     # SSL settings
-    include servers.d/common/ssl;
-    include servers.d/common/ocsp;
+    include servers.d/inc/ssl;
+    include servers.d/inc/ocsp;
 
     # Document root
     root /srv/http/example.com/www;
@@ -64,13 +64,13 @@ server {
     index index.html index.php;
 
     # Response headers
-    include servers.d/common/headers;
+    include servers.d/inc/headers;
 
     # Rules for common locations
-    include servers.d/common/locations;
+    include servers.d/inc/locations;
 
     # Common WordPress settings
-    #include servers.d/common/wordpress;
+    #include servers.d/inc/wordpress;
 
     # Very basic serving rules
     location / {

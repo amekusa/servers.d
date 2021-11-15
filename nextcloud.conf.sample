@@ -5,7 +5,7 @@ server {
     server_name cloud.example.com;
 
     # ACME challenge
-    include servers.d/common/letsencrypt;
+    include servers.d/inc/letsencrypt;
 
     # Redirect to HTTPS
     return 301 https://cloud.example.com$request_uri;
@@ -22,8 +22,8 @@ server {
     ssl_certificate_key /etc/letsencrypt/live/cloud.example.com/privkey.pem;
 
     # SSL settings
-    include servers.d/common/ssl;
-    include servers.d/common/ocsp;
+    include servers.d/inc/ssl;
+    include servers.d/inc/ocsp;
 
     # Document root
     root /usr/share/webapps/nextcloud;
@@ -36,7 +36,7 @@ server {
     index index.php index.html /index.php$request_uri;
 
     # Response headers
-    include servers.d/common/headers;
+    include servers.d/inc/headers;
     add_header Referrer-Policy "no-referrer" always;
     add_header X-Robots-Tag "none" always; # Deny robot's indexing
 
@@ -46,11 +46,11 @@ server {
 
     # Hide certain paths
     location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/) {
-        include servers.d/common/block;
+        include servers.d/inc/block;
     }
 
     # Rules for common locations
-    include servers.d/common/locations;
+    include servers.d/inc/locations;
 
     # Ensure this block, which passes PHP files to the PHP process, is above the blocks
     # which handle static assets (as seen below). If this block is not declared first,
@@ -60,7 +60,7 @@ server {
         fastcgi_pass unix:/run/nextcloud/nextcloud.sock;
 
         # PHP settings
-        include servers.d/common/php;
+        include servers.d/inc/php;
         fastcgi_param modHeadersAvailable true;         # Avoid sending the security headers twice
         fastcgi_param front_controller_active true;     # Enable pretty urls
         fastcgi_request_buffering off;
