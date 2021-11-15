@@ -1,2 +1,2 @@
-return 444;
 access_log /var/log/nginx/blocked.access.log;
+return 444;
