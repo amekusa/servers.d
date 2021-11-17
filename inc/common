@@ -1,4 +1,2 @@
 # Block scams
-if ($bad_ua) { return 444; }
-if ($bad_uri) { return 444; }
-if ($bad_args) { return 444; }
+if ($_block) { return 444; }
