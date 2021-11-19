@@ -4,15 +4,17 @@ client_max_body_size 8M;
 #       post_max_size (default: 8M)
 #       upload_max_filesize (default: 2M)
 
-# Do not log wp-cron.php
-location ~ ^/wp-cron\.php$ {
-    access_log off;
-    fastcgi_pass unix:/run/php-fpm/php-fpm.sock;
-    include servers.d/inc/php;
-}
-
 # Handling PHP requests
 location ~ [^/]\.php(?:/|$) {
+    location ~ ^/wp-cron\.php$ { access_log off; }
+    location ~ ^/wp-admin/admin-ajax\.php$ { access_log off; }
+
+    location ~ ^/wp-admin/ {
+        if ($status = 200) {
+            access_log /var/log/nginx/wp-admin.access.log;
+        }
+    }
+
     fastcgi_pass unix:/run/php-fpm/php-fpm.sock;
     include servers.d/inc/php;
 }
