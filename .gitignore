@@ -3,6 +3,7 @@
 !/README.md
 !/inc/
 !/common.conf
+!/default.conf.sample
 !/dynamic.conf.sample
 !/example.com.conf.sample
 !/nextcloud.conf.sample
