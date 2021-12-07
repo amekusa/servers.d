@@ -1,3 +1,3 @@
 # Log and Block scams
-access_log /var/log/nginx/blocked.access.log combined if=$_block;
+access_log /var/log/nginx/blocked.access.log detailed if=$_block;
 if ($_block) { return 444; }
