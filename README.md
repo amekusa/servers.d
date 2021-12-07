@@ -16,8 +16,8 @@ git clone git@github.com:amekusa/servers.d.git
 # /etc/nginx/nginx.conf
 ...
 http {
-	...
-	include servers.d/*.conf;
+    ...
+    include servers.d/*.conf;
 }
 ```
 
@@ -26,4 +26,3 @@ http {
 ```sh
 sudo nginx -t && sudo nginx -s reload
 ```
-
