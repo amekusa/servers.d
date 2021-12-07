@@ -2,7 +2,7 @@ server {
     listen      80;
     listen [::]:80; # For IPv6 connections
 
-    server_name example.com www.example.com;
+    server_name www.example.com example.com;
 
     # Common settings
     include servers.d/inc/common;
