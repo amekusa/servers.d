@@ -2,7 +2,7 @@
 !/.gitignore
 !/README.md
 !/inc/
-!/common.conf
+!/01.base.conf
 !/default.conf.sample
 !/dynamic.conf.sample
 !/example.com.conf.sample
