@@ -1,4 +1,6 @@
-# Parse URL properly
+# Split the request URI ($uri) into the 2 variables:
+#   1st capture -> $fastcgi_script_name
+#   2nd capture -> $fastcgi_path_info
 fastcgi_split_path_info ^(.+?\.php)(/.*)$;
 
 set $path_info $fastcgi_path_info; # Save path_info
@@ -15,8 +17,33 @@ fastcgi_max_temp_file_size 0; # Prevent fastcgi_buffering from allocating any di
 
 # FastCGI parameters
 include fastcgi_params;
-fastcgi_param HTTPS $https;
+# NOTE: /etc/nginx/fastcgi_params @ nginx/1.20.2
+#       fastcgi_param  QUERY_STRING       $query_string;
+#       fastcgi_param  REQUEST_METHOD     $request_method;
+#       fastcgi_param  CONTENT_TYPE       $content_type;
+#       fastcgi_param  CONTENT_LENGTH     $content_length;
+#
+#       fastcgi_param  SCRIPT_NAME        $fastcgi_script_name;
+#       fastcgi_param  REQUEST_URI        $request_uri;
+#       fastcgi_param  DOCUMENT_URI       $document_uri;
+#       fastcgi_param  DOCUMENT_ROOT      $document_root;
+#       fastcgi_param  SERVER_PROTOCOL    $server_protocol;
+#       fastcgi_param  REQUEST_SCHEME     $scheme;
+#       fastcgi_param  HTTPS              $https if_not_empty;
+#
+#       fastcgi_param  GATEWAY_INTERFACE  CGI/1.1;
+#       fastcgi_param  SERVER_SOFTWARE    nginx/$nginx_version;
+#
+#       fastcgi_param  REMOTE_ADDR        $remote_addr;
+#       fastcgi_param  REMOTE_PORT        $remote_port;
+#       fastcgi_param  SERVER_ADDR        $server_addr;
+#       fastcgi_param  SERVER_PORT        $server_port;
+#       fastcgi_param  SERVER_NAME        $server_name;
+#
+#       # PHP only, required if PHP was built with --enable-force-cgi-redirect
+#       fastcgi_param  REDIRECT_STATUS    200;
+
 fastcgi_param HTTP_PROXY ""; # Mitigate https://httpoxy.org/ vulnerabilities
 fastcgi_param HTTP_HOST $host; # Some apps use this variable
-fastcgi_param PATH_INFO $path_info;
 fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+fastcgi_param PATH_INFO $path_info;
