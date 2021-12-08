@@ -1,5 +1,5 @@
 limit_conn conn_ip  64;
-limit_conn conn_srv 512;
+limit_conn conn_srv 1024;
 
 limit_req zone=req_srv  burst=512 nodelay;
 limit_req zone=req_ip   burst=64  nodelay;
