@@ -7,18 +7,18 @@ client_max_body_size 8M;
 # Suppress useless logs
 location ~ ^/(?:wp-cron|wp-admin/admin-ajax)\.php$ {
     access_log off;
-    fastcgi_pass unix:/run/php-fpm/php-fpm.sock;
     include servers.d/inc/php;
+    fastcgi_pass unix:/run/php-fpm/php-fpm.sock;
 }
 
 # Use a separate log file under wp-admin
 location ~ ^/wp-admin/.*[^/]\.php(?:/|$) {
-    access_log /var/log/nginx/wp-admin.access.log;
-    fastcgi_pass unix:/run/php-fpm/php-fpm.sock;
+    access_log /var/log/nginx/wp-admin.access.log detailed;
     include servers.d/inc/php;
+    fastcgi_pass unix:/run/php-fpm/php-fpm.sock;
 }
 
 location ~ [^/]\.php(?:/|$) {
-    fastcgi_pass unix:/run/php-fpm/php-fpm.sock;
     include servers.d/inc/php;
+    fastcgi_pass unix:/run/php-fpm/php-fpm.sock;
 }
