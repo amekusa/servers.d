@@ -52,7 +52,7 @@ server {
 
     # Hide certain paths
     location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/) {
-        include servers.d/inc/block;
+        return 444;
     }
 
     # Rules for common locations
