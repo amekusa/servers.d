@@ -1,3 +1,6 @@
 # Log and Block scams
 access_log /var/log/nginx/blocked.access.log detailed if=$_block;
 if ($_block) { return 444; }
+
+# Rate limit
+include servers.d/inc/limits;

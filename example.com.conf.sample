@@ -7,9 +7,6 @@ server {
     # Common settings
     include servers.d/inc/common;
 
-    # Rate limit
-    include servers.d/inc/limits;
-
     # ACME challenge:
     # $ certbot certonly --webroot -w /var/lib/letsencrypt -d example.com,www.example.com
     include servers.d/inc/letsencrypt;
@@ -36,9 +33,6 @@ server {
     # Common settings
     include servers.d/inc/common;
 
-    # Rate limit
-    include servers.d/inc/limits;
-
     # SSL certificate files
     ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
@@ -59,9 +53,6 @@ server {
 
     # Common settings
     include servers.d/inc/common;
-
-    # Rate limit
-    include servers.d/inc/limits;
 
     # SSL certificate files
     ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
