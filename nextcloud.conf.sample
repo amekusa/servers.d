@@ -11,7 +11,9 @@ server {
     include servers.d/inc/letsencrypt;
 
     # Redirect to HTTPS
-    return 301 https://cloud.example.com$request_uri;
+    location / {
+        return 301 https://cloud.example.com$request_uri;
+    }
 }
 
 server {
