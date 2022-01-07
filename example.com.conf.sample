@@ -68,7 +68,7 @@ server {
     root /srv/http/example.com/www;
 
     # Logs
-    access_log /var/log/nginx/server.example.com.access.log combined if=$_log;
+    access_log /var/log/nginx/server.example.com.access.log detailed if=$_log;
     error_log  /var/log/nginx/server.example.com.error.log;
 
     # Directory index
