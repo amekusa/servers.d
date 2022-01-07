@@ -42,7 +42,9 @@ server {
     include servers.d/inc/ocsp;
 
     # Redirect to the non-www host (declared below)
-    return 301 https://example.com$request_uri;
+    location / {
+        return 301 https://example.com$request_uri;
+    }
 }
 
 server {

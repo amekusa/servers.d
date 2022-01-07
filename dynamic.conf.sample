@@ -9,7 +9,9 @@ server {
     include servers.d/inc/common;
 
     # Redirect to the non-www host (declared below)
-    return 301 $scheme://$domain$request_uri;
+    location / {
+        return 301 $scheme://$domain$request_uri;
+    }
 }
 
 server {
