@@ -1,4 +1,4 @@
-# Log and Block scams
+# Log & Block bad requests
 access_log /var/log/nginx/blocked.access.log detailed if=$_block;
 if ($_block) { return 444; }
 

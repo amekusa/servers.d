@@ -75,20 +75,6 @@ server {
         fastcgi_buffers 64 4K;
     }
 
-    # Assets
-    location ~ [^/]\.(?:css|js|svg|gif|png|jpe?g|ico)$ {
-        try_files $uri /index.php$request_uri;
-        expires 6M;         # Cache-Control policy borrowed from `.htaccess`
-        access_log off;     # Optional: Don't log access to assets
-    }
-
-    # Fonts
-    location ~ [^/]\.(?:woff2?|ttf|otf)$ {
-        try_files $uri /index.php$request_uri;
-        expires 7d;         # Cache-Control policy borrowed from `.htaccess`
-        access_log off;     # Optional: Don't log access to assets
-    }
-
     location /remote {
         return 301 /remote.php$request_uri;
     }
