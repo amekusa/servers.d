@@ -81,7 +81,7 @@ server {
     include servers.d/inc/assets;
 
     # Common WordPress settings
-    #include servers.d/inc/wordpress;
+    #include servers.d/inc/wp;
 
     # Rules for crawlers
     location = /robots.txt {
