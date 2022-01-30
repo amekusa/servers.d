@@ -4,8 +4,8 @@ server {
 
     server_name cloud.example.com;
 
-    # Common settings
-    include servers.d/inc/common;
+    include servers.d/inc/block;
+    include servers.d/inc/limits;
 
     # ACME challenge
     include servers.d/inc/letsencrypt;
@@ -22,8 +22,8 @@ server {
 
     server_name cloud.example.com;
 
-    # Common settings
-    include servers.d/inc/common;
+    include servers.d/inc/block;
+    include servers.d/inc/limits;
 
     # SSL certificate files
     ssl_certificate     /etc/letsencrypt/live/cloud.example.com/fullchain.pem;
@@ -57,9 +57,6 @@ server {
         return 444;
     }
 
-    # Rules for common locations
-    include servers.d/inc/locations;
-
     # Ensure this block, which passes PHP files to the PHP process, is above the blocks
     # which handle static assets (as seen below). If this block is not declared first,
     # then Nginx will encounter an infinite rewriting loop when it prepends `/index.php`
@@ -79,6 +76,26 @@ server {
         return 301 /remote.php$request_uri;
     }
 
+    # Assets
+    location ~* [^/]\.(?:js|css|ico|svg|png|jpe?g|gif|woff2?|otf|ttf|webp)$ {
+        valid_referers none server_names;
+        if ($invalid_referer) {
+            return 403;
+        }
+        limit_req zone=req_asset burst=64 nodelay;
+        expires 3d;
+        access_log off;
+        log_not_found off;
+        try_files $uri /index.php$request_uri;
+    }
+
+    # Rules for crawlers
+    location = /robots.txt {
+        access_log off;
+        alias /etc/nginx/servers.d/files/no-robots.txt; # deny
+    }
+
+    # Very basic serving rules
     location / {
         try_files $uri $uri/ /index.php$request_uri;
     }

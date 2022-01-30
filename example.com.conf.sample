@@ -4,8 +4,8 @@ server {
 
     server_name www.example.com example.com;
 
-    # Common settings
-    include servers.d/inc/common;
+    include servers.d/inc/block;
+    include servers.d/inc/limits;
 
     # ACME challenge:
     # $ certbot certonly --webroot -w /var/lib/letsencrypt -d example.com,www.example.com
@@ -30,8 +30,8 @@ server {
 
     server_name www.example.com;
 
-    # Common settings
-    include servers.d/inc/common;
+    include servers.d/inc/block;
+    include servers.d/inc/limits;
 
     # SSL certificate files
     ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
@@ -53,8 +53,8 @@ server {
 
     server_name example.com;
 
-    # Common settings
-    include servers.d/inc/common;
+    include servers.d/inc/block;
+    include servers.d/inc/limits;
 
     # SSL certificate files
     ssl_certificate     /etc/letsencrypt/live/example.com/fullchain.pem;
@@ -77,15 +77,26 @@ server {
     # Response headers
     include servers.d/inc/headers;
 
-    # Rules for common locations
-    include servers.d/inc/locations;
+    # Rules for assets
+    include servers.d/inc/assets;
 
     # Common WordPress settings
     #include servers.d/inc/wordpress;
 
+    # Rules for crawlers
+    location = /robots.txt {
+        access_log off;
+
+        # Choose:
+        log_not_found off; # static
+        #alias /etc/nginx/servers.d/files/no-robots.txt; # deny
+        #alias /etc/nginx/servers.d/files/wp-robots.txt; # wordpress
+    }
+
     # Very basic serving rules
     location / {
-        try_files $uri $uri/ =404; # For static site
-        #try_files $uri $uri/ /index.php$is_args$args; # For WordPress
+        # Choose:
+        try_files $uri $uri/ =404; # static
+        #try_files $uri $uri/ /index.php$is_args$args; # wordpress
     }
 }
