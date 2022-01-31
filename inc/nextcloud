@@ -11,9 +11,7 @@ client_max_body_size 512M;
 client_body_timeout 300s;
 
 # Hide certain paths
-location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/) {
-    return 444;
-}
+location ~* ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/) { return 403; }
 
 # Ensure this block, which passes PHP files to the PHP process, is above the blocks
 # which handle static assets (as seen below). If this block is not declared first,
@@ -34,17 +32,34 @@ location /remote {
     return 301 /remote.php$request_uri;
 }
 
-# Assets
-location ~* [^/]\.(?:js|css|ico|svg|png|jpe?g|gif|woff2?|otf|ttf|webp)$ {
+# Static assets
+location ~* [^/]\.(?:js|css|svg|png|jpe?g|gif|woff2?|otf|ttf|webp)$ {
     valid_referers none server_names;
-    if ($invalid_referer) {
-        return 403;
-    }
+    if ($invalid_referer) { return 417; }
     limit_req zone=req_asset burst=64 nodelay;
     expires 3d;
     access_log off;
     log_not_found off;
     try_files $uri /index.php$request_uri;
+}
+
+# Dynamic assets
+location ~* ^\/(?:svg\/|core\/preview) {
+    valid_referers none server_names;
+    if ($invalid_referer) { return 417; }
+    limit_req zone=req_asset burst=64 nodelay;
+    expires 3d;
+    access_log off;
+    log_not_found off;
+    try_files $uri /index.php$request_uri;
+}
+
+# Default favicon
+location = /favicon.ico {
+    limit_req zone=req_asset burst=64 nodelay;
+    expires 3d;
+    access_log off;
+    log_not_found off;
 }
 
 # Rules for crawlers
