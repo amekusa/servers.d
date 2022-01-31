@@ -1,0 +1,10 @@
+# Connection number limit
+limit_conn_status 429; # Status code: "Too many requests"
+limit_conn_zone $server_name        zone=conn_srv:64k; # Per server
+limit_conn_zone $binary_remote_addr zone=conn_ip:1m;   # Per client IP
+
+# Request rate limit
+limit_req_status 429; # Status code: "Too many requests"
+limit_req_zone $server_name        zone=req_srv:64k  rate=256r/s; # Per server
+limit_req_zone $binary_remote_addr zone=req_ip:1m    rate=2r/s;   # Per client IP
+limit_req_zone $binary_remote_addr zone=req_asset:1m rate=8r/s;   # Per client IP (for assets)
