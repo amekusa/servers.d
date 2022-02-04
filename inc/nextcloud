@@ -44,7 +44,7 @@ location ~ [^/]\.(?:js|css|svg|png|jpe?g|gif|woff2?|otf|ttf|webp)$ {
 }
 
 # Dynamic assets
-location ~ ^\/(?:svg\/|core\/preview) {
+location ~ ^/(?:svg/|core/preview) {
     valid_referers none server_names;
     if ($invalid_referer) { return 417; }
     limit_req zone=assets burst=64 nodelay;
