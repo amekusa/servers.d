@@ -1,5 +1,6 @@
 # Bad URIs
 map $uri $_bad_uri {
+    ~^/remote\.php/.+ 0; # nextcloud
     ~*/(?:xmlrpc|wp-login)\.php(?:/|$) 1;
     ~*/wp-(?:includes|content)/.+\.php(?:/|$) 1;
     ~*/\.(?!well-known/) 1;
