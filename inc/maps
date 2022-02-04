@@ -1,6 +1,5 @@
 # Bad URIs
-map $uri $_block_i {
-    default 0;
+map $uri $_bad_uri {
     ~*/(?:xmlrpc|wp-login)\.php(?:/|$) 1;
     ~*/wp-(?:includes|content)/.+\.php(?:/|$) 1;
     ~*/\.(?!well-known/) 1;
@@ -11,24 +10,21 @@ map $uri $_block_i {
 }
 
 # Bad query strings
-map &$args $_block_ii {
-    default $_block_i;
+map &$args $_bad_args {
     ~*&xdebug_session_start 1;
     ~*wp-config\.php 1;
 }
 
 # Bad referers
-map $http_referer $_block_iii {
+map $http_referer $_bad_ref {
     hostnames;
-    default $_block_ii;
     .anonymousfox.co 1;
     .simplesite.com 1;
     .binance.com 1;
 }
 
 # Bad user agents
-map $http_user_agent $_block {
-    default $_block_iii;
+map $http_user_agent $_bad_ua {
     ~*python 1; # python-requests, python-urllib
     ~*go[^\w]http 1; # go-http-client, go http package
     ~*apache 1; # apache-httpclient, apache openssl...
@@ -37,6 +33,10 @@ map $http_user_agent $_block {
     ~*barkrowler 1; # scraper
 }
 
-map $_block $_log {
-    0 1;
+map $_bad_uri$_bad_args$_bad_ref$_bad_ua $_block {
+    ~1 1;
+}
+
+map $status $_log {
+    ~^[231] 1;
 }
