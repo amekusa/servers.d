@@ -12,6 +12,8 @@ if [ ! -f "$LIST" ]; then
   exit 1
 fi
 
+echo "Generating .conf files from $LIST..."
+
 while IFS= read -r line; do
   info=($line) # split the line into an array
   [ ${#info[@]} = 0 ] && continue # skip empty lines
@@ -19,6 +21,7 @@ while IFS= read -r line; do
   domain=${info[0]}
   [ "${domain:0:1}" = "#" ] && continue # skip comment lines
 
+  echo
   echo "Domain: $domain"
 
   conf="$domain.conf"
@@ -56,3 +59,7 @@ while IFS= read -r line; do
   fi
 
 done < "$LIST"
+
+echo
+echo "All done."
+echo
