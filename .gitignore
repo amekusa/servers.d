@@ -1,4 +1,3 @@
 /available/
-/enabled/*
-!/enabled/.keep
+/enabled/
 /LIST
