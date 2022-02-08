@@ -7,22 +7,35 @@ Nginx server configurations
 
 ```sh
 cd /etc/nginx
-git clone git@github.com:amekusa/servers.d.git
+sudo git clone git@github.com:amekusa/servers.d.git
 ```
 
-2. Include all the `.conf` files in `http` block in `/etc/nginx/nginx.conf`.
+2. Include `enable.conf` within `http` block in `/etc/nginx/nginx.conf`.
 
 ```nginx
 # /etc/nginx/nginx.conf
 ...
 http {
     ...
-    include servers.d/*.conf;
+    include servers.d/enable.conf;
 }
+```
+
+3. Create & Edit `LIST` file.
+
+```sh
+sudo cp LIST.sample LIST
+sudo nano LIST
+```
+
+4. Run `conf.sh` to generate `.conf` files for your sites.
+
+```sh
+sudo ./conf.sh
 ```
 
 3. Test & Reload Nginx.
 
 ```sh
-sudo nginx -t && sudo nginx -s reload
+sudo ./reload.sh
 ```
