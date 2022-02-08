@@ -1,0 +1,9 @@
+#  Sites List
+# =============================
+#  Format:
+#  domain option1 option2 ...
+# -----------------------------
+example.com static static_robots
+blog.example.com wp wp_robots
+cloud.example.com nextcloud no_robots
+old.example.com DISABLE static static_robots
