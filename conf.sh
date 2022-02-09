@@ -4,6 +4,9 @@
 # =======================================
 #  By Satoshi Soma (https://amekusa.com)
 
+BASE="$(dirname "$(realpath "$0")")"
+cd "$BASE"
+
 LIST="LIST"
 if [ ! -f "$LIST" ]; then
   echo "$LIST doesn't exist."
@@ -55,7 +58,7 @@ while IFS= read -r line; do
     [ -d enabled ] && rm -f "enabled/$conf"
   else
     [ -d enabled ] || mkdir enabled
-    [ -L "enabled/$conf" ] || ln -s $(realpath "available/$conf") $(realpath "enabled/$conf")
+    ln -sf "$(realpath "available/$conf")" "$(realpath "enabled/$conf")"
   fi
 
 done < "$LIST"
