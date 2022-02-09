@@ -58,7 +58,7 @@ while IFS= read -r line; do
     [ -d enabled ] && rm -f "enabled/$conf"
   else
     [ -d enabled ] || mkdir enabled
-    ln -sf "$(realpath "available/$conf")" "$(realpath "enabled/$conf")"
+    ln -sf "$BASE/available/$conf" "$BASE/enabled/$conf"
   fi
 
 done < "$LIST"
