@@ -1,0 +1,74 @@
+# Directory index
+index index.php index.html /index.php$request_uri;
+
+# Response headers
+include servers.d/inc/headers;
+add_header Referrer-Policy "no-referrer" always;
+add_header X-Robots-Tag "none" always; # Deny robot's indexing
+
+# Upload size limit
+client_max_body_size 512M;
+client_body_timeout 300s;
+
+# Hide certain paths
+location ~ ^/(?:build|tests|config|lib|3rdparty|templates|data)(?:$|/) { return 403; }
+
+# Ensure this block, which passes PHP files to the PHP process, is above the blocks
+# which handle static assets (as seen below). If this block is not declared first,
+# then Nginx will encounter an infinite rewriting loop when it prepends `/index.php`
+# to the URI, resulting in a HTTP 500 error response.
+location ~ [^/]\.php(?:$|/) {
+    fastcgi_pass unix:/run/nextcloud/nextcloud.sock;
+
+    # PHP settings
+    include servers.d/inc/php;
+    fastcgi_param modHeadersAvailable true;         # Avoid sending the security headers twice
+    fastcgi_param front_controller_active true;     # Enable pretty urls
+    fastcgi_request_buffering off;
+    fastcgi_buffers 64 4K;
+}
+
+location /remote {
+    return 301 /remote.php$request_uri;
+}
+
+# Static assets
+location ~ [^/]\.(?:js|css|svg|png|jpe?g|gif|woff2?|otf|ttf|webp)$ {
+    valid_referers none server_names;
+    if ($invalid_referer) { return 417; }
+    limit_req zone=assets burst=64 nodelay;
+    expires 3d;
+    access_log off;
+    log_not_found off;
+    try_files $uri /index.php$request_uri;
+}
+
+# Dynamic assets
+location ~ ^/(?:svg/|core/preview) {
+    valid_referers none server_names;
+    if ($invalid_referer) { return 417; }
+    limit_req zone=assets burst=64 nodelay;
+    expires 3d;
+    access_log off;
+    log_not_found off;
+    try_files $uri /index.php$request_uri;
+}
+
+# Default favicon
+location = /favicon.ico {
+    limit_req zone=assets burst=64 nodelay;
+    expires 3d;
+    access_log off;
+    log_not_found off;
+}
+
+# Rules for crawlers
+location = /robots.txt {
+    access_log off;
+    alias /etc/nginx/servers.d/files/no-robots.txt; # deny
+}
+
+# Very basic serving rules
+location / {
+    try_files $uri $uri/ /index.php$request_uri;
+}

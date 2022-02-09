@@ -1,0 +1,7 @@
+user-agent: *
+disallow: /wp-*/
+disallow: /license.*
+disallow: /readme.*
+disallow: /image-sitemap*.xml
+disallow: /video-sitemap*.xml
+crawl-delay: 10

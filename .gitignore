@@ -1,9 +1,3 @@
-/*
-!/.gitignore
-!/README.md
-!/inc/
-!/01.base.conf
-!/default.conf.sample
-!/dynamic.conf.sample
-!/example.com.conf.sample
-!/nextcloud.conf.sample
+/available/
+/enabled/
+/LIST
