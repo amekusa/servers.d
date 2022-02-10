@@ -10,7 +10,6 @@ set $path_info $fastcgi_path_info; # Save path_info
 try_files $fastcgi_script_name =404;
 
 # FastCGI settings
-fastcgi_index index.php;
 fastcgi_intercept_errors on;
 fastcgi_hide_header X-Powered-By;  # Hide PHP version
 fastcgi_hide_header X-Redirect-By; # Hide CMS
